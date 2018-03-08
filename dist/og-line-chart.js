@@ -161,7 +161,45 @@
        */
       legendAlignment: {
         type: String,
-        value: "right"
+        value: "left"
+      },
+      /**
+       * DateFormat
+       * 
+       * Eg: YYYY-MM-DD
+       * @property dateFormat
+       */
+      dateFormat: {
+        type: String,
+        value: "YYYY-MM-DD"
+      },
+      /**
+       * Time Format
+       * Eg: HH:mm:ss
+       *
+       * @property timeFormat
+       */
+      timeFormat: {
+        type: String,
+        value: "HH:mm:ss"
+      },
+      /**
+       * Timezone
+       * Eg: UTC
+       *
+       * @property timeZone
+       */
+      timeZone: {
+        type: String,
+        value: "UTC"
+      },
+      fromMoment: {
+        type: String,
+        notify: true
+      },
+      toMoment: {
+        type: String,
+        notify: true
       }
     },
 
@@ -169,7 +207,7 @@
       "color": "",
       "axisLabel": "",
       "legendLabel": "",
-      "inputDateFormat": "%Y-%m-%dT%H:%M:%S.%LZ",
+      "inputDateFormat": "%Q",
       "tickFormat": "",
       "tickTimeFormat": "",
       "hideGrid": false,
@@ -252,13 +290,17 @@
 
       data.forEach(function (d) {
         if (_this2.parseTime) {
-          d.x = d.x.getTime ? d.x : _this2.parseTime(d.x);
+          d.x = d.timeStamp.getTime ? d.x : _this2.parseTime(d.timeStamp);
         }
-        for (var i = 0; i < d.length - 1; i++) {
-          var key = "y";
-          d[key][i] = d[key][i] ? +d[key][i] : 0;
+        d.y = [];
+        for (var i = 0; i < _this2.cfgSeries.length; i++) {
+          var key = 'y' + i;
+          d[key] = d[key] ? +d[key] : 0;
+          d.y.push(d[key]);
         }
       });
+      this.set("fromMoment", Px.moment(data[0].x, 'x'));
+      this.set("toMoment", Px.moment(data[data.length - 1].x, 'x'));
       return data;
     },
     _prepareChartingArea: function _prepareChartingArea() {
@@ -276,15 +318,19 @@
       this.minimap.adjustedHeight = 40;
 
       d3.select(this.$.chart).select("svg").remove();
-      this.svg = d3.select(this.$.chart).append("svg").attr("viewBox", "0 0 " + this.width + " " + this.height).attr("preserveAspectRatio", "xMidYMid meet").append("g").attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+      this.containerSvg = d3.select(this.$.chart).append("svg").attr("viewBox", "0 0 " + this.width + " " + this.height).attr("preserveAspectRatio", "xMidYMid meet");
 
-      this.minimapSvg = this.svg.append("g").attr("class", "minimap").attr("transform", "translate(" + "0," + (this.adjustedHeight + this.minimap.adjustedHeight + 20) + ")");
+      this.containerSvg.append("defs").append("clipPath").attr("id", "clip").append("rect").attr("width", this.adjustedWidth).attr("height", this.height).attr("x", 0).attr("y", 0);
+
+      this.svg = this.containerSvg.append("g").attr("class", "focus").attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
+
+      this.minimapSvg = this.containerSvg.append("g").attr("class", "minimap").attr("transform", "translate(" + this.margin.left + "," + (this.adjustedHeight + this.minimap.adjustedHeight + 50) + ")");
 
       this.toolTip = d3.tip(d3.select(this.$.chart)).attr("class", "d3-tip").offset([-8, 0]).html(function (d) {
         return d.msg;
       });
 
-      this.svg.call(this.toolTip);
+      this.containerSvg.call(this.toolTip);
     },
     _prepareAxes: function _prepareAxes(data) {
       // set the ranges
@@ -308,7 +354,12 @@
           return Math.max(a, b);
         });
       });
-      var yMin = this.axisData.y.start > 0 ? this.axisData.y.start : 0;
+      var yMin = d3.min(data, function (d) {
+        return d.y.reduce(function (a, b) {
+          return Math.min(a, b);
+        });
+      });
+      yMin = this.axisData.y.start ? this.axisData.y.start : yMin;
 
       x.domain(d3.extent(data, function (d) {
         return d.x;
@@ -376,7 +427,10 @@
 
       // Add the X Axis
       var _xAxis = d3.axisBottom(x);
+      this.xAxis = _xAxis;
+
       var _minimapXAxis = d3.axisBottom(this.minimap.x);
+
       if (this.parseTime && this.axisData.x.tickTimeFormat) {
         _xAxis.tickFormat(d3.timeFormat(this.axisData.x.tickTimeFormat));
         _minimapXAxis.tickFormat(d3.timeFormat(this.axisData.x.tickTimeFormat));
@@ -413,6 +467,7 @@
       var x = this.x,
           y = this.y,
           d3 = Px.d3;
+
       this.cfgSeries.forEach(function (_series, idx) {
 
         var filteredData = data.filter(function (_datum) {
@@ -439,21 +494,30 @@
         if (isLineChart) {
           _this3._drawLineChart(_series, filteredData, idx);
         }
-
-        _this3.svg.selectAll(".dot").data(filteredData).enter().append("circle").attr("r", _series.radius).attr("cx", function (d, i) {
-          return x(d.x);
-        }).attr("cy", function (d) {
-          return y(d.y[idx]);
-        }).attr("fill", _series.color || "steelblue").attr("class", "series-circle-" + idx).on('mouseover', function (d, i) {
-          d3.select(_this3).attr('r', _series.radius + 2);
-          var prefix = _series.label ? _series.label + ": " : "";
-          d.msg = prefix + d.y[idx];
-          _this3.toolTip.show(d);
-        }).on('mouseout', function (d) {
-          d3.select(_this3).attr('r', _series.radius);
-          _this3.toolTip.hide(d);
-        });
+        //TODO: Move dots along zoom
+        // this.svg.selectAll(".dot")
+        //   .data(filteredData)
+        //   .enter()
+        //     .append("circle")
+        //     .attr("r", _series.radius)
+        //     .attr("cx", (d, i) => x(d.x))
+        //     .attr("cy", (d) => y(d.y[idx]))
+        //     .attr("fill", _series.color || "steelblue")
+        //     .attr("class", "series-circle-"+idx)
+        //     .on('mouseover', (d, i) => {
+        //       d3.select(this)
+        //         .attr('r', _series.radius + 2);
+        //       let prefix = _series.label ? _series.label + ": " : "";
+        //       d.msg = prefix + d.y[idx];
+        //       this.toolTip.show(d);
+        //     })
+        //     .on('mouseout', (d) => {
+        //       d3.select(this)
+        //         .attr('r', _series.radius);
+        //       this.toolTip.hide(d);
+        //     });
       });
+      this._drawBrushAndZoomForMinimap();
     },
     _drawLineChart: function _drawLineChart(_series, filteredData, idx) {
       var x = this.x,
@@ -473,18 +537,19 @@
         return minimapY(d.y[idx]);
       });
 
+      this.lines = this.lines || [];
+      this.lines.push(line);
+
       if (this.cfgSeries[idx].interpolation) {
         line.curve(d3[this.cfgSeries[idx].interpolation]);
         minimapLine.curve(d3[this.cfgSeries[idx].interpolation]);
       }
 
-      this.svg.append("path").data([filteredData]).attr("class", "series-line series-circle-" + idx).style("stroke", _series.color || "steelblue").style("stroke-dasharray", _series.dashArray || "0,0").attr("fill", "transparent").attr("d", line).style("pointer-events", "none");
+      this.svg.append("path").data([filteredData]).attr("class", 'series-line series-line-' + idx + ' series-circle-' + idx).style("stroke", _series.color || "steelblue").style("stroke-dasharray", _series.dashArray || "0,0").attr("fill", "transparent").attr("d", line).style("pointer-events", "none");
 
-      this.minimapSvg.append("path").data([filteredData]).attr("class", "minimap-line minimap-series-" + idx).style("stroke", _series.color || "steelblue").style("stroke-dasharray", _series.dashArray || "0,0").attr("fill", "transparent").attr("d", minimapLine).style("pointer-events", "none");
+      this.minimapSvg.append("path").data([filteredData]).attr("class", 'minimap-line minimap-series-' + idx).style("stroke", _series.color || "steelblue").style("stroke-dasharray", _series.dashArray || "0,0").attr("fill", "transparent").attr("d", minimapLine).style("pointer-events", "none");
     },
     _drawBrushAndZoomForMinimap: function _drawBrushAndZoomForMinimap() {
-      var _this4 = this;
-
       var x = this.x,
           y = this.y,
           d3 = Px.d3,
@@ -494,23 +559,61 @@
         if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
         var s = d3.event.selection || me.minimap.x.range();
         x.domain(s.map(me.minimap.x.invert, me.minimap.x));
+        me.lines && me.lines.forEach(function (_line, idx) {
+          me.svg.select('.series-line-' + idx).attr("d", _line);
+          me.svg.select('.series-circle-' + idx).attr("d", _line);
+        });
+        me.svg.select(".x-axis").call(me.xAxis);
         me.svg.select(".zoom").call(me.zoom.transform, d3.zoomIdentity.scale(me.adjustedWidth / (s[1] - s[0])).translate(-s[0], 0));
+        me.set("fromMoment", Px.moment(x.domain()[0], 'x'));
+        me.set("toMoment", Px.moment(x.domain()[1], 'x'));
       };
 
       this.zoomed = function () {
         if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
         var t = d3.event.transform;
         x.domain(t.rescaleX(me.minimap.x).domain());
-        _this4.minimapSvg.select(".brush").call(brush.move, x.range().map(t.invertX, t));
+        me.lines && me.lines.forEach(function (_line, idx) {
+          me.svg.select('.series-line-' + idx).attr("d", _line);
+          me.svg.select('.series-circle-' + idx).attr("d", _line);
+        });
+        me.svg.select(".x-axis").call(me.xAxis);
+        me.minimapSvg.select(".brush").call(me.brush.move, x.range().map(t.invertX, t));
+        me.set("fromMoment", Px.moment(x.domain()[0], 'x'));
+        me.set("toMoment", Px.moment(x.domain()[1], 'x'));
       };
 
-      this.brush = d3.brushX().extent([[0, 0], [this.adjustedHeight, this.minimap.adjustedHeight]]).on("brush end", this.brushed);
+      this.brush = d3.brushX().extent([[0, 0], [this.adjustedWidth, this.minimap.adjustedHeight]]).handleSize(6).on("start brush end", this.brushed);
 
-      this.zoom = d3.zoom().scaleExtent([1, Infinity]).translateExtent([[0, 0], [this.adjustedWidth, this.minimap.adjustedHeight]]).extent([[0, 0], [this.adjustedWidth, this.minimap.adjustedHeight]]).on("zoom", this.zoomed);
+      this.zoom = d3.zoom().scaleExtent([1, Infinity]).translateExtent([[0, 0], [this.adjustedWidth, this.height]]).extent([[0, 0], [this.adjustedWidth, this.height]]).on("zoom", this.zoomed);
 
-      this.minimapSvg.append("g").attr("class", "brush").call(this.brush).call(brush.move, x.range());
+      this.minimapSvg.append("g").attr("class", "brush").call(this.brush).call(this.brush.move, this.x.range());
 
-      this.svg.append("rect").attr("class", "zoom").attr("width", this.adjustedWidth).attr("height", this.adjustedHeight).attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")").call(this.zoom);
+      this.containerSvg.append("rect").attr("class", "zoom").attr("width", this.adjustedWidth).attr("height", this.minimap.adjustedHeight).attr("transform", "translate(" + this.margin.left + "," + (this.adjustedHeight + this.minimap.adjustedHeight + 50) + ")").call(this.zoom);
+    },
+    _updateBrushWithFromMoment: function _updateBrushWithFromMoment(event, fromMoment) {
+      if (!fromMoment || !this.brush) {
+        return;
+      }
+      var x = this.x,
+          y = this.y,
+          d3 = Px.d3,
+          me = this;
+      var s = me.minimap.x.range();
+      x.domain(s.map(me.minimap.x.invert, me.minimap.x));
+      this.minimapSvg.select(".brush").call(this.brush.move, [x(fromMoment.value.toDate()), x(this.toMoment.toDate())]);
+    },
+    _updateBrushWithToMoment: function _updateBrushWithToMoment(event, toMoment) {
+      if (!toMoment || !this.brush) {
+        return;
+      }
+      var x = this.x,
+          y = this.y,
+          d3 = Px.d3,
+          me = this;
+      var s = me.minimap.x.range();
+      x.domain(s.map(me.minimap.x.invert, me.minimap.x));
+      this.minimapSvg.select(".brush").call(this.brush.move, [x(this.fromMoment.toDate()), x(toMoment.value.toDate())]);
     },
     _redraw: function _redraw(margin, data, cfgXAxis, cfgYAxis, cfgSeries) {
       if (!data || !data.length) {

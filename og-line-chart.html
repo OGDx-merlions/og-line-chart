@@ -8,6 +8,8 @@
 <link rel="import" href="../px-d3-imports/px-d3-imports.html"/>
 <script src="d3-tip.js"></script>
 
+
+<link rel="import" href="../px-rangepicker/px-rangepicker.html"/>
 <link rel="import" href="css/og-line-chart-styles.html">
 
 <!--
@@ -29,7 +31,7 @@ Scatter plot implementation using D3
       <div class="flex flex--col">
         <div class$="flex flex--{{legendAlignment}} legend">
           <div class="flex flex--row">
-            <template is="dom-repeat" items="{{axisData.y.series}}" index-as="idx" as="item">
+            <template is="dom-repeat" items="{{cfgSeries}}" index-as="idx" as="item">
               <div class="flex flex__item flex--col u-pr++ zeta legend-unit" 
                 style$="border-color: {{item.color}}" on-tap="_toggleSeries">
                 <span class="flex flex--top muted">{{item.legendLabel}}</span>
@@ -37,6 +39,18 @@ Scatter plot implementation using D3
             </template>
           </div>
         </div>
+        <px-rangepicker
+          id="rangepicker"
+          show-buttons
+          date-format="[[dateFormat]]"
+          time-format="[[timeFormat]]"
+          time-zone="[[timeZone]]"
+          show-time-zone="abbreviatedText"
+          from-moment="{{fromMoment}}"
+          to-moment="{{toMoment}}"
+          on-from-moment-changed="_updateBrushWithFromMoment"
+          on-to-moment-changed="_updateBrushWithToMoment">
+        </px-rangepicker>
       </div>
       <div class="flex flex--col">
         <div id="chart"></div>
