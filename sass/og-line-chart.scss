@@ -1,0 +1,166 @@
+/*
+ * Copyright (c) 2014 GE Global Research. All rights reserved.
+ *
+ * The copyright to the computer software herein is the property of
+ * GE Global Research. The software may be used and/or copied only
+ * with the written permission of GE Global Research or in accordance
+ * with the terms and conditions stipulated in the agreement/contract
+ * under which the software has been supplied.
+ */
+
+//
+// Sass for the for the og-scatter-plot component
+//
+// @author
+//
+
+
+
+// Settings
+@import "px-colors-design/_settings.colors.scss";
+
+// Tools
+
+// Generic
+@import "px-normalize-design/_generic.normalize.scss";
+@import "px-box-sizing-design/_generic.box-sizing.scss";
+@import "px-helpers-design/_generic.helpers.scss";
+
+// Base
+@import "px-flexbox-design/_base.flexbox.scss";
+@import "px-viewport-design/_base.viewport.scss";
+
+$inuit-enable-margins : true;
+$inuit-enable-paddings--huge : true;
+@import 'px-spacing-design/_trumps.spacing.scss';
+
+
+@import "px-headings-design/_base.headings.scss";
+
+$axis-color: #95a5ae;
+
+:host {
+  --x-axis-color: $axis-color;
+  --y-axis-color: $axis-color;
+  --x-tick-color: $axis-color;
+  --y-tick-color: $axis-color;
+}
+
+#chart {
+  .d3-tip {
+    line-height: 1;
+    padding: 6px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  /* Creates a small triangle extender for the tooltip */
+  .d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+  }
+
+  /* Style northward tooltips specifically */
+  .d3-tip.n:after {
+    margin: -2px 0 0 0;
+    top: 100%;
+    left: 0;
+  }
+
+  .x-axis-label {
+    text-anchor: middle;
+    font-size: 0.65rem;
+    fill: var(--x-axis-color);
+  }
+  .y-axis-label {
+    text-anchor: middle;
+    font-size: 0.65rem;
+    fill: var(--y-axis-color);
+  }
+  .today {
+    stroke-width: 1;
+    stroke: $axis-color;
+  }
+  .today-text {
+    font-size: 0.65rem;
+    fill: $axis-color;
+  }
+
+  .x-axis {
+    color: var(--x-axis-color);
+    line, path, text {
+      stroke: var(--x-axis-color);
+    }
+    text {
+      fill: var(--x-tick-color);
+      stroke-width: 0.0001rem;
+    }
+  }
+
+  .y-axis {
+    color: var(--y-axis-color);
+    line, path, text {
+      stroke: var(--y-axis-color);
+    }
+    text {
+      fill: var(--y-tick-color);
+      stroke-width: 0.0001rem;
+    }
+  }
+
+  .grid {
+    pointer-events: none;
+    line  {
+      stroke-opacity: 0.2;
+      shape-rendering: crispEdges;
+    }
+    path {
+      stroke-width: 0;
+    }
+  }
+
+  .x-grid {
+    line {
+      stroke: var(--x-axis-color);
+    }
+  }
+
+  .y-grid {
+    line {
+      stroke: var(--y-axis-color);
+    }
+  }
+
+  .minimap {
+    padding-top: 2rem;
+  }
+}
+
+.legend {
+  padding-bottom: 2rem;
+  .legend-unit {
+    padding-left: 0.2rem;
+    line-height: 1;
+    border-left: 0.3rem solid;
+  }
+}
+
+
+// Meta
+
+// Objects
+
+// Component
+
+// Trumps
+@import "px-spacing-responsive-design/_trumps.spacing-responsive.scss";
+@import "px-widths-responsive-design/_trumps.widths-responsive.scss";

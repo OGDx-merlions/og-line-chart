@@ -1,0 +1,54 @@
+{
+  "name": "og-line-chart",
+  "version": "0.0.1",
+  "main": [
+    "og-line-chart.html"
+  ],
+  "ignore": [
+    ".*",
+    "npm-debug.log",
+    "gulpfile.js",
+    "sass",
+    "test",
+    "OSS_Notice.pdf",
+    ".github",
+    "og-line-chart.png",
+    "LICENSE.md",
+    "CONTRIBUTING.md",
+    "HISTORY.md",
+    "README.md",
+    ".jshintrc",
+    ".editorconfig"
+  ],
+  "dependencies": {
+    "polymer": "#1.9 - 2",
+    "px-d3-imports": "^3.0.1",
+    "px-rangepicker": "^3.5.1",
+    "px-datetime-range-field": "^2.2.1"
+  },
+  "devDependencies": {
+    "px-meta-lists-design": "^1.0.0",
+    "px-headings-design": "^1.0.0",
+    "px-layout-design": "^1.0.0",
+    "px-starter-kit-design": "^1.0.0",
+    "px-demo": "^3.0.0",
+    "px-theme": "^3.0.0",
+    "web-component-tester": "^6.0.0"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^1.0.0"
+  },
+  "variants": {
+    "1.x": {
+      "dependencies": {
+        "polymer": "^1.9.0"
+      },
+      "devDependencies": {
+        "web-component-tester": "^5.0.0"
+      },
+      "resolutions": {
+        "webcomponentsjs": "^0.7.0"
+      }
+    }
+  }
+}

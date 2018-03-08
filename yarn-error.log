@@ -1,0 +1,67 @@
+Arguments: 
+  /Users/ezhilvendhan/.nvm/versions/node/v6.9.2/bin/node /usr/local/Cellar/yarn/1.0.2/libexec/bin/yarn.js install
+
+PATH: 
+  /Users/ezhilvendhan/.nvm/versions/node/v6.9.2/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/go/bin:/Library/Frameworks/GDAL.framework/Programs:/Users/ezhilvendhan/go/bin:/Users/ezhilvendhan/Dev/bin
+
+Yarn version: 
+  1.0.2
+
+Node version: 
+  6.9.2
+
+Platform: 
+  darwin x64
+
+npm manifest: 
+  {
+      "name": "og-line-chart",
+      "author": "General Electric",
+      "description": "A Px component",
+      "version": "0.0.1",
+      "private": true,
+      "extName" : null,
+      "repository" :
+      {
+          "type": "git",
+          "url": "https://github.com/PredixDev/og-line-chart.git"
+      },
+      "homepage": "http://predix.io/",
+      "devDependencies": {
+        "browser-sync": "^2.13.0",
+        "gulp": "^3.9.1",
+        "gulp-autoprefixer": "^3.1.0",
+        "gulp-bump": "^2.4.0",
+        "gulp-cached": "^1.1.1",
+        "gulp-clean": "^0.3.2",
+        "gulp-concat": "^2.6.0",
+        "gulp-cssmin": "^0.1.7",
+        "gulp-if": "^2.0.1",
+        "gulp-load-plugins": "^1.2.4",
+        "gulp-match": "^1.0.2",
+        "gulp-rename": "^1.2.2",
+        "gulp-sass": "^2.3.2",
+        "gulp-sequence": "^0.4.5",
+        "gulp-sourcemaps": "^2.4.1",
+        "gulp-style-modules": "^0.1.0",
+        "node-sass-import-once": "^1.2.0",
+        "stream-combiner2": "^1.1.1",
+        "yargs": "^6.0.0",
+        "polymer-cli": "^1.0.0"
+      }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
+
+Trace: 
+  Error: unable to get local issuer certificate
+      at Error (native)
+      at TLSSocket.<anonymous> (_tls_wrap.js:1079:38)
+      at emitNone (events.js:86:13)
+      at TLSSocket.emit (events.js:185:7)
+      at TLSSocket._finishInit (_tls_wrap.js:603:8)
+      at TLSWrap.ssl.onhandshakedone (_tls_wrap.js:433:38)

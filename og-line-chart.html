@@ -1,0 +1,46 @@
+<!--
+    Relative paths assume component is being run from inside an app or another component, where dependencies are flat
+    siblings. When this component is run from its own repo (e.g. tests, examples), we assume the server is started with
+    'gulp serve' (or similar server setup) to enable correct finding of bower dependencies for local runs.
+-->
+<link rel="import" href="../polymer/polymer.html"/>
+
+<link rel="import" href="../px-d3-imports/px-d3-imports.html"/>
+<script src="d3-tip.js"></script>
+
+<link rel="import" href="css/og-line-chart-styles.html">
+
+<!--
+Scatter plot implementation using D3
+
+### Usage
+
+
+@element og-line-chart
+@blurb REPLACE THIS TEXT WITH A COMPONENT DESCRIPTION
+@homepage index.html
+@demo index.html
+-->
+
+<dom-module id="og-line-chart">
+  <template>
+    <style include="og-line-chart-styles"></style>
+    <div class="flex flex--col chart-container">
+      <div class="flex flex--col">
+        <div class$="flex flex--{{legendAlignment}} legend">
+          <div class="flex flex--row">
+            <template is="dom-repeat" items="{{axisData.y.series}}" index-as="idx" as="item">
+              <div class="flex flex__item flex--col u-pr++ zeta legend-unit" 
+                style$="border-color: {{item.color}}" on-tap="_toggleSeries">
+                <span class="flex flex--top muted">{{item.legendLabel}}</span>
+              </div>
+            </template>
+          </div>
+        </div>
+      </div>
+      <div class="flex flex--col">
+        <div id="chart"></div>
+      </div>
+  </template>
+</dom-module>
+<script src="dist/og-line-chart.js"></script>
