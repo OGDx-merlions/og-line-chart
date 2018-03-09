@@ -596,7 +596,6 @@
       this.containerSvg.append("rect").attr("class", "zoom").attr("width", this.adjustedWidth).attr("height", this.minimap.adjustedHeight).attr("transform", "translate(" + this.margin.left + "," + (this.adjustedHeight + this.minimap.adjustedHeight + 50) + ")").call(this.zoom);
     },
     _updateBrush: function _updateBrush(event, range) {
-      console.log(range);
       if (!range || !this.brush) {
         return;
       }

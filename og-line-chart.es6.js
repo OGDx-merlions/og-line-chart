@@ -677,7 +677,6 @@
     },
 
     _updateBrush(event, range) {
-      console.log(range)
       if(!range || !this.brush) {return;}
       let x = this.x, y = this.y, d3 = Px.d3, me = this;
       let s = me.minimap.x.range();
