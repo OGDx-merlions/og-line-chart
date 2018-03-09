@@ -13,11 +13,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 13,
+              "line": 15,
               "column": 6
             },
             "end": {
-              "line": 16,
+              "line": 18,
               "column": 7
             }
           },
@@ -33,11 +33,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 22,
+              "line": 24,
               "column": 6
             },
             "end": {
-              "line": 25,
+              "line": 27,
               "column": 7
             }
           },
@@ -53,7 +53,7 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 32,
+              "line": 34,
               "column": 6
             },
             "end": {
@@ -63,8 +63,7 @@
           },
           "metadata": {
             "polymer": {
-              "notify": true,
-              "observer": "\"_redraw\""
+              "notify": true
             }
           }
         },
@@ -79,14 +78,12 @@
               "column": 6
             },
             "end": {
-              "line": 53,
+              "line": 51,
               "column": 7
             }
           },
           "metadata": {
-            "polymer": {
-              "observer": "\"_redraw\""
-            }
+            "polymer": {}
           },
           "defaultValue": "[]"
         },
@@ -97,11 +94,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 59,
+              "line": 57,
               "column": 6
             },
             "end": {
-              "line": 62,
+              "line": 60,
               "column": 7
             }
           },
@@ -117,11 +114,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 68,
+              "line": 66,
               "column": 6
             },
             "end": {
-              "line": 70,
+              "line": 68,
               "column": 7
             }
           },
@@ -136,11 +133,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 76,
+              "line": 74,
               "column": 6
             },
             "end": {
-              "line": 79,
+              "line": 77,
               "column": 7
             }
           },
@@ -156,11 +153,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 85,
+              "line": 83,
               "column": 6
             },
             "end": {
-              "line": 88,
+              "line": 86,
               "column": 7
             }
           },
@@ -176,11 +173,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 94,
+              "line": 92,
               "column": 6
             },
             "end": {
-              "line": 97,
+              "line": 95,
               "column": 7
             }
           },
@@ -190,26 +187,62 @@
           "defaultValue": "\"Forecast\""
         },
         {
-          "name": "axisData",
+          "name": "cfgXAxis",
           "type": "Object",
-          "description": "Forecast Label",
+          "description": "X Axis Config\nEg: {\n            \"color\": \"\",\n            \"axisLabel\": \"\",\n            \"legendLabel\": \"\",\n            \"inputDateFormat\": \"\",\n            \"tickFormat\": \"\",\n            \"tickTimeFormat\": \"\",\n            \"hideGrid\": false,\n            \"d3NiceType\": \"\",\n            \"niceTicks\": 0,\n            \"axisColor\": \"\",\n            \"tickColor\": \"\"\n          }",
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 103,
+              "line": 113,
               "column": 6
             },
             "end": {
-              "line": 107,
+              "line": 115,
               "column": 7
             }
           },
           "metadata": {
-            "polymer": {
-              "notify": true,
-              "observer": "\"_redraw\""
-            }
+            "polymer": {}
           }
+        },
+        {
+          "name": "cfgYAxis",
+          "type": "Object",
+          "description": "Y Axis Config\nEg: {\n            \"hideGrid\": false,\n            \"axisLabel\": \"\",\n            \"axisColor\": \"\",\n            \"tickColor\": \"\",\n            \"niceTicks\": 6,\n            \"tickFormat\": \"\",\n            \"start\": 0\n          }",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 129,
+              "column": 6
+            },
+            "end": {
+              "line": 131,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "cfgSeries",
+          "type": "Array",
+          "description": "Y Axis Series Config\nEg: [\n            {\n              \"color\": \"\",\n              \"dashArray\": \"\",\n              \"radius\": 2,\n              \"legendLabel\": \"\",\n              \"tickFormat\": \"\",\n              \"type\": \"\",\n              \"interpolation\": \"\",\n              \"xStart\": \"\",\n              \"xEnd\": \"\"\n            }\n          ]",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 149,
+              "column": 6
+            },
+            "end": {
+              "line": 154,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "[]"
         },
         {
           "name": "legendAlignment",
@@ -218,31 +251,152 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 114,
+              "line": 161,
               "column": 6
             },
             "end": {
-              "line": 117,
+              "line": 164,
               "column": 7
             }
           },
           "metadata": {
             "polymer": {}
           },
-          "defaultValue": "\"right\""
+          "defaultValue": "\"left\""
         },
         {
-          "name": "__defaultAxisData",
-          "type": "Object",
-          "description": "",
-          "privacy": "private",
+          "name": "dateFormat",
+          "type": "string",
+          "description": "DateFormat\n\nEg: YYYY-MM-DD",
+          "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 120,
+              "line": 171,
+              "column": 6
+            },
+            "end": {
+              "line": 174,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"YYYY-MM-DD\""
+        },
+        {
+          "name": "timeFormat",
+          "type": "string",
+          "description": "Time Format\nEg: HH:mm:ss",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 181,
+              "column": 6
+            },
+            "end": {
+              "line": 184,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"HH:mm:ss\""
+        },
+        {
+          "name": "timeZone",
+          "type": "string",
+          "description": "Timezone\nEg: UTC",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 191,
+              "column": 6
+            },
+            "end": {
+              "line": 194,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"UTC\""
+        },
+        {
+          "name": "fromMoment",
+          "type": "string",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 195,
+              "column": 6
+            },
+            "end": {
+              "line": 198,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          }
+        },
+        {
+          "name": "toMoment",
+          "type": "string",
+          "description": "",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 199,
+              "column": 6
+            },
+            "end": {
+              "line": 202,
+              "column": 7
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "notify": true
+            }
+          }
+        },
+        {
+          "name": "_defaultCfgXAxis",
+          "type": "Object",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 205,
               "column": 4
             },
             "end": {
-              "line": 154,
+              "line": 217,
+              "column": 5
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "_defaultCfgYAxis",
+          "type": "Object",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 219,
+              "column": 4
+            },
+            "end": {
+              "line": 227,
               "column": 5
             }
           },
@@ -258,11 +412,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 156,
+              "line": 229,
               "column": 4
             },
             "end": {
-              "line": 158,
+              "line": 231,
               "column": 5
             }
           },
@@ -275,11 +429,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 159,
+              "line": 232,
               "column": 4
             },
             "end": {
-              "line": 164,
+              "line": 234,
               "column": 5
             }
           },
@@ -292,11 +446,11 @@
           "privacy": "public",
           "sourceRange": {
             "start": {
-              "line": 165,
+              "line": 235,
               "column": 4
             },
             "end": {
-              "line": 180,
+              "line": 251,
               "column": 5
             }
           },
@@ -309,11 +463,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 181,
+              "line": 252,
               "column": 4
             },
             "end": {
-              "line": 199,
+              "line": 282,
               "column": 5
             }
           },
@@ -326,11 +480,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 200,
+              "line": 283,
               "column": 4
             },
             "end": {
-              "line": 217,
+              "line": 304,
               "column": 5
             }
           },
@@ -347,11 +501,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 218,
+              "line": 305,
               "column": 4
             },
             "end": {
-              "line": 231,
+              "line": 333,
               "column": 5
             }
           },
@@ -364,11 +518,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 232,
+              "line": 334,
               "column": 4
             },
             "end": {
-              "line": 269,
+              "line": 386,
               "column": 5
             }
           },
@@ -385,11 +539,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 270,
+              "line": 387,
               "column": 4
             },
             "end": {
-              "line": 284,
+              "line": 401,
               "column": 5
             }
           },
@@ -406,32 +560,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 285,
+              "line": 402,
               "column": 4
             },
             "end": {
-              "line": 304,
-              "column": 5
-            }
-          },
-          "metadata": {},
-          "params": [
-            {
-              "name": "data"
-            }
-          ]
-        },
-        {
-          "name": "_drawChart",
-          "description": "",
-          "privacy": "protected",
-          "sourceRange": {
-            "start": {
-              "line": 305,
-              "column": 4
-            },
-            "end": {
-              "line": 362,
+              "line": 421,
               "column": 5
             }
           },
@@ -448,11 +581,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 363,
+              "line": 422,
               "column": 4
             },
             "end": {
-              "line": 394,
+              "line": 462,
               "column": 5
             }
           },
@@ -464,26 +597,148 @@
           ]
         },
         {
-          "name": "_redraw",
+          "name": "_drawChart",
           "description": "",
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 395,
+              "line": 463,
               "column": 4
             },
             "end": {
-              "line": 398,
+              "line": 520,
               "column": 5
             }
           },
           "metadata": {},
           "params": [
             {
-              "name": "newData"
+              "name": "data"
+            }
+          ]
+        },
+        {
+          "name": "_drawLineChart",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 521,
+              "column": 4
+            },
+            "end": {
+              "line": 550,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "_series"
             },
             {
-              "name": "oldData"
+              "name": "filteredData"
+            },
+            {
+              "name": "idx"
+            }
+          ]
+        },
+        {
+          "name": "_drawBrushAndZoomForMinimap",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 551,
+              "column": 4
+            },
+            "end": {
+              "line": 592,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_updateBrushWithFromMoment",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 593,
+              "column": 4
+            },
+            "end": {
+              "line": 604,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            },
+            {
+              "name": "fromMoment"
+            }
+          ]
+        },
+        {
+          "name": "_updateBrushWithToMoment",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 605,
+              "column": 4
+            },
+            "end": {
+              "line": 616,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "event"
+            },
+            {
+              "name": "toMoment"
+            }
+          ]
+        },
+        {
+          "name": "_redraw",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 617,
+              "column": 4
+            },
+            "end": {
+              "line": 623,
+              "column": 5
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "margin"
+            },
+            {
+              "name": "data"
+            },
+            {
+              "name": "cfgXAxis"
+            },
+            {
+              "name": "cfgYAxis"
+            },
+            {
+              "name": "cfgSeries"
             }
           ]
         },
@@ -493,11 +748,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 399,
+              "line": 624,
               "column": 4
             },
             "end": {
-              "line": 412,
+              "line": 637,
               "column": 5
             }
           },
@@ -523,7 +778,7 @@
           "column": 10
         },
         "end": {
-          "line": 413,
+          "line": 638,
           "column": 3
         }
       },
@@ -535,11 +790,11 @@
           "description": "Width of the Chart.",
           "sourceRange": {
             "start": {
-              "line": 13,
+              "line": 15,
               "column": 6
             },
             "end": {
-              "line": 16,
+              "line": 18,
               "column": 7
             }
           },
@@ -551,11 +806,11 @@
           "description": "Height of the Chart.",
           "sourceRange": {
             "start": {
-              "line": 22,
+              "line": 24,
               "column": 6
             },
             "end": {
-              "line": 25,
+              "line": 27,
               "column": 7
             }
           },
@@ -567,7 +822,7 @@
           "description": "Chart Margin.\n        Default: {top: 30, right: 20, bottom: 40, left: 50}",
           "sourceRange": {
             "start": {
-              "line": 32,
+              "line": 34,
               "column": 6
             },
             "end": {
@@ -587,7 +842,7 @@
               "column": 6
             },
             "end": {
-              "line": 53,
+              "line": 51,
               "column": 7
             }
           },
@@ -599,11 +854,11 @@
           "description": "Show Today Line and subsequently, Historical and Forecast Labels",
           "sourceRange": {
             "start": {
-              "line": 59,
+              "line": 57,
               "column": 6
             },
             "end": {
-              "line": 62,
+              "line": 60,
               "column": 7
             }
           },
@@ -615,11 +870,11 @@
           "description": "The X-axis point which should be considered as today",
           "sourceRange": {
             "start": {
-              "line": 68,
+              "line": 66,
               "column": 6
             },
             "end": {
-              "line": 70,
+              "line": 68,
               "column": 7
             }
           },
@@ -631,11 +886,11 @@
           "description": "Today Label",
           "sourceRange": {
             "start": {
-              "line": 76,
+              "line": 74,
               "column": 6
             },
             "end": {
-              "line": 79,
+              "line": 77,
               "column": 7
             }
           },
@@ -647,11 +902,11 @@
           "description": "Historical Label",
           "sourceRange": {
             "start": {
-              "line": 85,
+              "line": 83,
               "column": 6
             },
             "end": {
-              "line": 88,
+              "line": 86,
               "column": 7
             }
           },
@@ -663,11 +918,11 @@
           "description": "Forecast Label",
           "sourceRange": {
             "start": {
-              "line": 94,
+              "line": 92,
               "column": 6
             },
             "end": {
-              "line": 97,
+              "line": 95,
               "column": 7
             }
           },
@@ -675,15 +930,15 @@
           "type": "string"
         },
         {
-          "name": "axis-data",
-          "description": "Forecast Label",
+          "name": "cfg-x-axis",
+          "description": "X Axis Config\nEg: {\n            \"color\": \"\",\n            \"axisLabel\": \"\",\n            \"legendLabel\": \"\",\n            \"inputDateFormat\": \"\",\n            \"tickFormat\": \"\",\n            \"tickTimeFormat\": \"\",\n            \"hideGrid\": false,\n            \"d3NiceType\": \"\",\n            \"niceTicks\": 0,\n            \"axisColor\": \"\",\n            \"tickColor\": \"\"\n          }",
           "sourceRange": {
             "start": {
-              "line": 103,
+              "line": 113,
               "column": 6
             },
             "end": {
-              "line": 107,
+              "line": 115,
               "column": 7
             }
           },
@@ -691,15 +946,127 @@
           "type": "Object"
         },
         {
+          "name": "cfg-y-axis",
+          "description": "Y Axis Config\nEg: {\n            \"hideGrid\": false,\n            \"axisLabel\": \"\",\n            \"axisColor\": \"\",\n            \"tickColor\": \"\",\n            \"niceTicks\": 6,\n            \"tickFormat\": \"\",\n            \"start\": 0\n          }",
+          "sourceRange": {
+            "start": {
+              "line": 129,
+              "column": 6
+            },
+            "end": {
+              "line": 131,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "Object"
+        },
+        {
+          "name": "cfg-series",
+          "description": "Y Axis Series Config\nEg: [\n            {\n              \"color\": \"\",\n              \"dashArray\": \"\",\n              \"radius\": 2,\n              \"legendLabel\": \"\",\n              \"tickFormat\": \"\",\n              \"type\": \"\",\n              \"interpolation\": \"\",\n              \"xStart\": \"\",\n              \"xEnd\": \"\"\n            }\n          ]",
+          "sourceRange": {
+            "start": {
+              "line": 149,
+              "column": 6
+            },
+            "end": {
+              "line": 154,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "Array"
+        },
+        {
           "name": "legend-alignment",
           "description": "Legend Alignment\nEg: right, left, center",
           "sourceRange": {
             "start": {
-              "line": 114,
+              "line": 161,
               "column": 6
             },
             "end": {
-              "line": 117,
+              "line": 164,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "date-format",
+          "description": "DateFormat\n\nEg: YYYY-MM-DD",
+          "sourceRange": {
+            "start": {
+              "line": 171,
+              "column": 6
+            },
+            "end": {
+              "line": 174,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "time-format",
+          "description": "Time Format\nEg: HH:mm:ss",
+          "sourceRange": {
+            "start": {
+              "line": 181,
+              "column": 6
+            },
+            "end": {
+              "line": 184,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "time-zone",
+          "description": "Timezone\nEg: UTC",
+          "sourceRange": {
+            "start": {
+              "line": 191,
+              "column": 6
+            },
+            "end": {
+              "line": 194,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "from-moment",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 195,
+              "column": 6
+            },
+            "end": {
+              "line": 198,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "to-moment",
+          "description": "",
+          "sourceRange": {
+            "start": {
+              "line": 199,
+              "column": 6
+            },
+            "end": {
+              "line": 202,
               "column": 7
             }
           },
@@ -716,8 +1083,14 @@
         },
         {
           "type": "CustomEvent",
-          "name": "axis-data-changed",
-          "description": "Fired when the `axisData` property changes.",
+          "name": "from-moment-changed",
+          "description": "Fired when the `fromMoment` property changes.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "to-moment-changed",
+          "description": "Fired when the `toMoment` property changes.",
           "metadata": {}
         }
       ],
