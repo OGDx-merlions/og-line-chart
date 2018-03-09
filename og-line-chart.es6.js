@@ -193,6 +193,10 @@
         type: String,
         value: "UTC"
       },
+      dateRange: {
+        type: String,
+        computed: 'computeDateRange(fromMoment, toMoment)'
+      },
       fromMoment: {
         type: String,
         notify: true
@@ -672,25 +676,16 @@
         .call(this.zoom);
     },
 
-    _updateBrushWithFromMoment(event, fromMoment) {
-      if(!fromMoment || !this.brush) {return;}
+    _updateBrush(event, range) {
+      console.log(range)
+      if(!range || !this.brush) {return;}
       let x = this.x, y = this.y, d3 = Px.d3, me = this;
       let s = me.minimap.x.range();
       x.domain(s.map(me.minimap.x.invert, me.minimap.x));
       this.minimapSvg
         .select(".brush")
         .call(this.brush.move, 
-          [x(fromMoment.value.toDate()), x(this.toMoment.toDate())]);
-    },
-    _updateBrushWithToMoment(event, toMoment) {
-      if(!toMoment || !this.brush) {return;}
-      let x = this.x, y = this.y, d3 = Px.d3, me = this;
-      let s = me.minimap.x.range();
-      x.domain(s.map(me.minimap.x.invert, me.minimap.x));
-      this.minimapSvg
-        .select(".brush")
-        .call(this.brush.move, 
-          [x(this.fromMoment.toDate()), x(toMoment.value.toDate())]);
+          [x(range.momentObjs.from.toDate()), x(range.momentObjs.to.toDate())]);
     },
 
     _redraw(margin, data, cfgXAxis, cfgYAxis, cfgSeries) {
@@ -699,6 +694,13 @@
       }
       Px.d3.select(this.$.chart).select("svg").remove();
       this.draw();
+    },
+
+    computeDateRange(fromMoment, toMoment) {
+      return {
+        "from": fromMoment.format('YYYY-MM-DDThh:mm:ss'),
+        "to": toMoment.format('YYYY-MM-DDThh:mm:ss')
+      };
     },
 
     _toggleSeries(event) {

@@ -193,6 +193,10 @@
         type: String,
         value: "UTC"
       },
+      dateRange: {
+        type: String,
+        computed: 'computeDateRange(fromMoment, toMoment)'
+      },
       fromMoment: {
         type: String,
         notify: true
@@ -591,8 +595,9 @@
 
       this.containerSvg.append("rect").attr("class", "zoom").attr("width", this.adjustedWidth).attr("height", this.minimap.adjustedHeight).attr("transform", "translate(" + this.margin.left + "," + (this.adjustedHeight + this.minimap.adjustedHeight + 50) + ")").call(this.zoom);
     },
-    _updateBrushWithFromMoment: function _updateBrushWithFromMoment(event, fromMoment) {
-      if (!fromMoment || !this.brush) {
+    _updateBrush: function _updateBrush(event, range) {
+      console.log(range);
+      if (!range || !this.brush) {
         return;
       }
       var x = this.x,
@@ -601,19 +606,7 @@
           me = this;
       var s = me.minimap.x.range();
       x.domain(s.map(me.minimap.x.invert, me.minimap.x));
-      this.minimapSvg.select(".brush").call(this.brush.move, [x(fromMoment.value.toDate()), x(this.toMoment.toDate())]);
-    },
-    _updateBrushWithToMoment: function _updateBrushWithToMoment(event, toMoment) {
-      if (!toMoment || !this.brush) {
-        return;
-      }
-      var x = this.x,
-          y = this.y,
-          d3 = Px.d3,
-          me = this;
-      var s = me.minimap.x.range();
-      x.domain(s.map(me.minimap.x.invert, me.minimap.x));
-      this.minimapSvg.select(".brush").call(this.brush.move, [x(this.fromMoment.toDate()), x(toMoment.value.toDate())]);
+      this.minimapSvg.select(".brush").call(this.brush.move, [x(range.momentObjs.from.toDate()), x(range.momentObjs.to.toDate())]);
     },
     _redraw: function _redraw(margin, data, cfgXAxis, cfgYAxis, cfgSeries) {
       if (!data || !data.length) {
@@ -621,6 +614,12 @@
       }
       Px.d3.select(this.$.chart).select("svg").remove();
       this.draw();
+    },
+    computeDateRange: function computeDateRange(fromMoment, toMoment) {
+      return {
+        "from": fromMoment.format('YYYY-MM-DDThh:mm:ss'),
+        "to": toMoment.format('YYYY-MM-DDThh:mm:ss')
+      };
     },
     _toggleSeries: function _toggleSeries(event) {
       var label = "series-circle-" + event.model.get("idx");
