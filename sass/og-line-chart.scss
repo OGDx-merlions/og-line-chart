@@ -154,9 +154,13 @@ $axis-color: #95a5ae;
     pointer-events: all;
   }
 
+  .overlay, .selection {
+    stroke: lightgray;
+  }
+
   .handle {
     stroke: gray;
-    padding: 0.2rem;
+    fill: white;
   }
 }
 

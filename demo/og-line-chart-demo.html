@@ -40,10 +40,10 @@
           width="960"
           height="300"
           show-today-line
-          today="2017-04-30T00:00:00.000Z"
+          today="1455322126697"
           today-label="Today"
-          historical-label="[[props.historicalLabel.value]]"
-          forecast-label="[[props.forecastLabel.value]]"
+          historical-label="Historical"
+          forecast-label="Forecast"
           legend-alignment="[[props.legendAlignment.value]]"
           margin='{"top": 30, "right": 20, "bottom": 40, "left": 50}'
           data='[[props.data.value]]'
@@ -242,7 +242,7 @@
       },
       today: {
         type: String,
-        defaultValue: '2017-04-30T00:00:00.000Z',
+        defaultValue: '1455322126697',
         inputType: 'text'
       },
       todayLabel: {
@@ -303,8 +303,15 @@
             "color": "fuchsia", 
             "legendLabel": "Oranges",
             "type": "line", 
-            "interpolation": 
-            "curveCardinal"
+            "interpolation": "curveCardinal",
+            "xEnd": 1455322126697
+          }, {
+            "color": "fuchsia", 
+            "legendLabel": "Forecast",
+            "type": "line", 
+            "interpolation": "curveCardinal",
+            "xStart": 1455322126697,
+            "dashArray": "2,2"
           }
         ],
         inputType: 'code:JSON'

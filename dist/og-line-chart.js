@@ -195,7 +195,7 @@
       },
       dateRange: {
         type: String,
-        computed: 'computeDateRange(fromMoment, toMoment)'
+        notify: true
       },
       fromMoment: {
         type: String,
@@ -303,8 +303,7 @@
           d.y.push(d[key]);
         }
       });
-      this.set("fromMoment", Px.moment(data[0].x, 'x'));
-      this.set("toMoment", Px.moment(data[data.length - 1].x, 'x'));
+      this.setDateRange(data[0].x, data[data.length - 1].x);
       return data;
     },
     _prepareChartingArea: function _prepareChartingArea() {
@@ -408,19 +407,20 @@
       var x = this.x,
           y = this.y,
           d3 = Px.d3;
+      this.svg.selectAll(".line-sep").remove();
       if (this.showTodayLine) {
-        this.svg.append("svg:line").attr("class", "today").attr("x1", x(this.todayAsDate)).attr("y1", this.adjustedHeight + 18).attr("x2", x(this.todayAsDate)).attr("y2", -7);
+        this.svg.append("svg:line").attr("class", "line-sep today").attr("x1", x(this.todayAsDate)).attr("y1", this.adjustedHeight + 18).attr("x2", x(this.todayAsDate)).attr("y2", -7);
 
         if (this.historicalLabel) {
-          this.svg.append("text").attr("class", "today-text").attr("x", (x(x.domain()[0]) + x(this.todayAsDate)) / 2).attr("y", -9).text(this.historicalLabel);
+          this.svg.append("text").attr("class", "line-sep today-text").attr("x", x(this.todayAsDate) / 3).attr("y", -9).text(this.historicalLabel);
         }
 
         if (this.todayLabel) {
-          this.svg.append("text").attr("class", "today-text").attr("x", x(this.todayAsDate) - 10).attr("y", -9).text(this.todayLabel);
+          this.svg.append("text").attr("class", "line-sep today-text").attr("x", x(this.todayAsDate) - 10).attr("y", -9).text(this.todayLabel);
         }
 
         if (this.forecastLabel) {
-          this.svg.append("text").attr("class", "today-text").attr("x", x(x.domain()[1]) * 0.8).attr("y", -9).text(this.forecastLabel);
+          this.svg.append("text").attr("class", "line-sep today-text").attr("x", x(this.todayAsDate) * 1.1).attr("y", -9).text(this.forecastLabel);
         }
       }
     },
@@ -562,6 +562,7 @@
       this.brushed = function () {
         if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
         var s = d3.event.selection || me.minimap.x.range();
+        var brushExtent = d3.brushSelection(me.minimapSvg.select(".brush").node());
         x.domain(s.map(me.minimap.x.invert, me.minimap.x));
         me.lines && me.lines.forEach(function (_line, idx) {
           me.svg.select('.series-line-' + idx).attr("d", _line);
@@ -569,8 +570,8 @@
         });
         me.svg.select(".x-axis").call(me.xAxis);
         me.svg.select(".zoom").call(me.zoom.transform, d3.zoomIdentity.scale(me.adjustedWidth / (s[1] - s[0])).translate(-s[0], 0));
-        me.set("fromMoment", Px.moment(x.domain()[0], 'x'));
-        me.set("toMoment", Px.moment(x.domain()[1], 'x'));
+        me.setDateRange(x.domain()[0], x.domain()[1]);
+        me._drawTimelineSeparators();
       };
 
       this.zoomed = function () {
@@ -583,17 +584,17 @@
         });
         me.svg.select(".x-axis").call(me.xAxis);
         me.minimapSvg.select(".brush").call(me.brush.move, x.range().map(t.invertX, t));
-        me.set("fromMoment", Px.moment(x.domain()[0], 'x'));
-        me.set("toMoment", Px.moment(x.domain()[1], 'x'));
+        me.setDateRange(x.domain()[0], x.domain()[1]);
+        me._drawTimelineSeparators();
       };
 
-      this.brush = d3.brushX().extent([[0, 0], [this.adjustedWidth, this.minimap.adjustedHeight]]).handleSize(6).on("start brush end", this.brushed);
+      this.brush = d3.brushX().extent([[0, 0], [this.adjustedWidth, this.minimap.adjustedHeight]]).handleSize(7).on("brush end", this.brushed);
 
       this.zoom = d3.zoom().scaleExtent([1, Infinity]).translateExtent([[0, 0], [this.adjustedWidth, this.height]]).extent([[0, 0], [this.adjustedWidth, this.height]]).on("zoom", this.zoomed);
 
       this.minimapSvg.append("g").attr("class", "brush").call(this.brush).call(this.brush.move, this.x.range());
 
-      this.containerSvg.append("rect").attr("class", "zoom").attr("width", this.adjustedWidth).attr("height", this.minimap.adjustedHeight).attr("transform", "translate(" + this.margin.left + "," + (this.adjustedHeight + this.minimap.adjustedHeight + 50) + ")").call(this.zoom);
+      this.minimapSvg.append("rect").attr("class", "zoom").attr("width", this.adjustedWidth).attr("height", this.minimap.adjustedHeight).attr("transform", "translate(" + this.margin.left + "," + (this.adjustedHeight + this.minimap.adjustedHeight + 50) + ")").call(this.zoom);
     },
     _updateBrush: function _updateBrush(event, range) {
       if (!range || !this.brush) {
@@ -614,11 +615,14 @@
       Px.d3.select(this.$.chart).select("svg").remove();
       this.draw();
     },
-    computeDateRange: function computeDateRange(fromMoment, toMoment) {
-      return {
-        "from": fromMoment.format('YYYY-MM-DDThh:mm:ss'),
-        "to": toMoment.format('YYYY-MM-DDThh:mm:ss')
+    setDateRange: function setDateRange(fromMoment, toMoment) {
+      this.fromMoment = Px.moment(fromMoment, 'x');
+      this.toMoment = Px.moment(toMoment, 'x');
+      var range = {
+        "from": this.fromMoment.format('YYYY-MM-DDThh:mm:ss'),
+        "to": this.toMoment.format('YYYY-MM-DDThh:mm:ss')
       };
+      this.set("dateRange", range);
     },
     _toggleSeries: function _toggleSeries(event) {
       var label = "series-circle-" + event.model.get("idx");

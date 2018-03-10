@@ -195,7 +195,7 @@
       },
       dateRange: {
         type: String,
-        computed: 'computeDateRange(fromMoment, toMoment)'
+        notify: true
       },
       fromMoment: {
         type: String,
@@ -301,8 +301,7 @@
           d.y.push(d[key]);
         }
       });
-      this.set("fromMoment", Px.moment(data[0].x, 'x'));
-      this.set("toMoment", Px.moment(data[data.length-1].x, 'x'));
+      this.setDateRange(data[0].x, data[data.length-1].x);
       return data;
     },
     _prepareChartingArea() {
@@ -428,9 +427,10 @@
     },
     _drawTimelineSeparators(data) {
       let x = this.x, y = this.y, d3 = Px.d3;
+      this.svg.selectAll(".line-sep").remove();
       if(this.showTodayLine) {
         this.svg.append("svg:line")
-          .attr("class", "today")
+          .attr("class", "line-sep today")
           .attr("x1", x(this.todayAsDate))
           .attr("y1", this.adjustedHeight+18)
           .attr("x2", x(this.todayAsDate))
@@ -438,15 +438,15 @@
 
         if(this.historicalLabel) {
           this.svg.append("text")
-            .attr("class", "today-text")
-            .attr("x", (x(x.domain()[0]) + x(this.todayAsDate))/2)
+            .attr("class", "line-sep today-text")
+            .attr("x", x(this.todayAsDate)/3)
             .attr("y", -9)
             .text(this.historicalLabel);
         }
 
         if(this.todayLabel) {
           this.svg.append("text")
-            .attr("class", "today-text")
+            .attr("class", "line-sep today-text")
             .attr("x", x(this.todayAsDate)-10)
             .attr("y", -9)
             .text(this.todayLabel);
@@ -454,8 +454,8 @@
 
         if(this.forecastLabel) {
           this.svg.append("text")
-            .attr("class", "today-text")
-            .attr("x", (x(x.domain()[1]) * 0.8))
+            .attr("class", "line-sep today-text")
+            .attr("x", x(this.todayAsDate)*1.1)
             .attr("y", -9)
             .text(this.forecastLabel);
         }
@@ -620,8 +620,9 @@
       let x = this.x, y = this.y, d3 = Px.d3, me = this;
 
       this.brushed = () => {
-        if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
+        if(d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
         let s = d3.event.selection || me.minimap.x.range();
+        let brushExtent = d3.brushSelection(me.minimapSvg.select(".brush").node());
         x.domain(s.map(me.minimap.x.invert, me.minimap.x));
         me.lines && me.lines.forEach((_line, idx) => {
           me.svg.select(`.series-line-${idx}`).attr("d", _line);
@@ -632,12 +633,12 @@
           d3.zoomIdentity
             .scale(me.adjustedWidth / (s[1] - s[0]))
             .translate(-s[0], 0));
-        me.set("fromMoment", Px.moment(x.domain()[0], 'x'));
-        me.set("toMoment", Px.moment(x.domain()[1], 'x'));
+        me.setDateRange(x.domain()[0], x.domain()[1]);
+        me._drawTimelineSeparators();
       }
 
       this.zoomed = () => {
-        if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
+        if(d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
         let t = d3.event.transform;
         x.domain(t.rescaleX(me.minimap.x).domain());
         me.lines && me.lines.forEach((_line, idx) => {
@@ -645,15 +646,16 @@
           me.svg.select(`.series-circle-${idx}`).attr("d", _line);
         })
         me.svg.select(".x-axis").call(me.xAxis);
-        me.minimapSvg.select(".brush").call(me.brush.move, x.range().map(t.invertX, t));
-        me.set("fromMoment", Px.moment(x.domain()[0], 'x'));
-        me.set("toMoment", Px.moment(x.domain()[1], 'x'));
+        me.minimapSvg.select(".brush")
+          .call(me.brush.move, x.range().map(t.invertX, t));
+        me.setDateRange(x.domain()[0], x.domain()[1]);
+        me._drawTimelineSeparators();
       };
 
       this.brush = d3.brushX()
         .extent([[0, 0], [this.adjustedWidth, this.minimap.adjustedHeight]])
-        .handleSize(6)
-        .on("start brush end", this.brushed);
+        .handleSize(7)
+        .on("brush end", this.brushed);
 
       this.zoom = d3.zoom()
         .scaleExtent([1, Infinity])
@@ -666,7 +668,7 @@
         .call(this.brush)
         .call(this.brush.move, this.x.range());
   
-      this.containerSvg.append("rect")
+      this.minimapSvg.append("rect")
         .attr("class", "zoom")
         .attr("width", this.adjustedWidth)
         .attr("height", this.minimap.adjustedHeight)
@@ -695,11 +697,15 @@
       this.draw();
     },
 
-    computeDateRange(fromMoment, toMoment) {
-      return {
-        "from": fromMoment.format('YYYY-MM-DDThh:mm:ss'),
-        "to": toMoment.format('YYYY-MM-DDThh:mm:ss')
+    setDateRange(fromMoment, toMoment) {
+      this.fromMoment = Px.moment(fromMoment, 'x');
+      this.toMoment = Px.moment(toMoment, 'x');
+      const range = {
+        "from": this.fromMoment.format('YYYY-MM-DDThh:mm:ss'),
+        "to": this.toMoment.format('YYYY-MM-DDThh:mm:ss')
       };
+      this.set("dateRange", range);
+
     },
 
     _toggleSeries(event) {
