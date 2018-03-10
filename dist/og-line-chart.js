@@ -258,7 +258,7 @@
       var _this = this;
 
       this.axisData = { x: {}, y: {} };
-      this.minimap = {};
+      this.minimap = this.minimap || {};
       Object.assign(this.axisData.x, this._defaultCfgXAxis, this.cfgXAxis);
       Object.assign(this.axisData.y, this._defaultCfgYAxis, this.cfgYAxis);
       this.cfgSeries = this.cfgSeries || [];
@@ -562,7 +562,6 @@
       this.brushed = function () {
         if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
         var s = d3.event.selection || me.minimap.x.range();
-        var brushExtent = d3.brushSelection(me.minimapSvg.select(".brush").node());
         x.domain(s.map(me.minimap.x.invert, me.minimap.x));
         me.lines && me.lines.forEach(function (_line, idx) {
           me.svg.select('.series-line-' + idx).attr("d", _line);
