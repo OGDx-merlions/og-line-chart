@@ -341,7 +341,7 @@
           },
           "metadata": {
             "polymer": {
-              "readOnly": true
+              "notify": true
             }
           }
         },
@@ -505,7 +505,7 @@
               "column": 4
             },
             "end": {
-              "line": 308,
+              "line": 307,
               "column": 5
             }
           },
@@ -522,11 +522,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 309,
+              "line": 308,
               "column": 4
             },
             "end": {
-              "line": 337,
+              "line": 336,
               "column": 5
             }
           },
@@ -539,11 +539,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 338,
+              "line": 337,
               "column": 4
             },
             "end": {
-              "line": 390,
+              "line": 389,
               "column": 5
             }
           },
@@ -560,11 +560,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 391,
+              "line": 390,
               "column": 4
             },
             "end": {
-              "line": 405,
+              "line": 404,
               "column": 5
             }
           },
@@ -581,7 +581,7 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 406,
+              "line": 405,
               "column": 4
             },
             "end": {
@@ -675,7 +675,7 @@
               "column": 4
             },
             "end": {
-              "line": 596,
+              "line": 597,
               "column": 5
             }
           },
@@ -688,7 +688,7 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 597,
+              "line": 598,
               "column": 4
             },
             "end": {
@@ -740,7 +740,7 @@
           ]
         },
         {
-          "name": "computeDateRange",
+          "name": "setDateRange",
           "description": "",
           "privacy": "public",
           "sourceRange": {
@@ -749,7 +749,7 @@
               "column": 4
             },
             "end": {
-              "line": 622,
+              "line": 625,
               "column": 5
             }
           },
@@ -769,11 +769,11 @@
           "privacy": "protected",
           "sourceRange": {
             "start": {
-              "line": 623,
+              "line": 626,
               "column": 4
             },
             "end": {
-              "line": 636,
+              "line": 639,
               "column": 5
             }
           },
@@ -799,7 +799,7 @@
           "column": 10
         },
         "end": {
-          "line": 637,
+          "line": 640,
           "column": 3
         }
       },
@@ -1116,6 +1116,12 @@
           "type": "CustomEvent",
           "name": "margin-changed",
           "description": "Fired when the `margin` property changes.",
+          "metadata": {}
+        },
+        {
+          "type": "CustomEvent",
+          "name": "date-range-changed",
+          "description": "Fired when the `dateRange` property changes.",
           "metadata": {}
         },
         {
