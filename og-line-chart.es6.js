@@ -242,7 +242,7 @@
     draw() {
       this._setupDefaults();
       let d3 = Px.d3, data = this.data;
-      if(!data || data.length === 0 || !this.axisData || !this.axisData.x) {return;}
+      if(!data || data.length === 0 || !this.cfgSeries || !this.cfgSeries.length) {return;}
       data = this._massageData(data);
       this._prepareChartingArea();
       this._prepareAxes(data);
@@ -259,7 +259,6 @@
       this.minimap = this.minimap || {};
       Object.assign(this.axisData.x, this._defaultCfgXAxis, this.cfgXAxis);
       Object.assign(this.axisData.y, this._defaultCfgYAxis, this.cfgYAxis);
-      this.cfgSeries = this.cfgSeries || [];
 
       const updateStyle = (key, val) => {
         if(this.customStyle) {
@@ -298,7 +297,7 @@
         for(let i = 0; i < this.cfgSeries.length; i++) {
           let key = `y${i}`;
           d[key] = d[key] ? (+d[key]) : 0;
-          d.y.push(d[key]);
+          d.y.push(+d[key]);
         }
       });
       this.setDateRange(data[0].x, data[data.length-1].x);

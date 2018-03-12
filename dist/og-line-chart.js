@@ -241,7 +241,7 @@
       this._setupDefaults();
       var d3 = Px.d3,
           data = this.data;
-      if (!data || data.length === 0 || !this.axisData || !this.axisData.x) {
+      if (!data || data.length === 0 || !this.cfgSeries || !this.cfgSeries.length) {
         return;
       }
       data = this._massageData(data);
@@ -261,7 +261,6 @@
       this.minimap = this.minimap || {};
       Object.assign(this.axisData.x, this._defaultCfgXAxis, this.cfgXAxis);
       Object.assign(this.axisData.y, this._defaultCfgYAxis, this.cfgYAxis);
-      this.cfgSeries = this.cfgSeries || [];
 
       var updateStyle = function updateStyle(key, val) {
         if (_this.customStyle) {
@@ -300,7 +299,7 @@
         for (var i = 0; i < _this2.cfgSeries.length; i++) {
           var key = 'y' + i;
           d[key] = d[key] ? +d[key] : 0;
-          d.y.push(d[key]);
+          d.y.push(+d[key]);
         }
       });
       this.setDateRange(data[0].x, data[data.length - 1].x);
