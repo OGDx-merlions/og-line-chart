@@ -204,6 +204,10 @@
       toMoment: {
         type: String,
         notify: true
+      },
+      loadInProgress: {
+        type: Boolean,
+        value: true
       }
     },
 
@@ -252,6 +256,8 @@
       this._drawChart(data);
 
       this.fire("chart-drawn", {});
+      this.$.spinner.finished = true;
+      this.loadInProgress = false;
     },
     
     _setupDefaults() {
@@ -548,9 +554,7 @@
         }
         const isLineChart = this.cfgSeries[idx].type === "line";
 
-        if(isLineChart) {
-          this._drawLineChart(_series, filteredData, idx);
-        }
+        this._drawLineChart(_series, filteredData, idx);
         //TODO: Move dots along zoom
         // this.svg.selectAll(".dot")
         //   .data(filteredData)
@@ -707,7 +711,7 @@
     },
 
     _toggleSeries(event) {
-      const label = "series-circle-" + event.model.get("idx");
+      const label = "series-line-" + event.model.get("idx");
 
       this[label] = !this[label];
 			if(this[label]) {

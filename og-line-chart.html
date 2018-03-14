@@ -7,6 +7,7 @@
 
 <link rel="import" href="../px-moment-imports/px-moment-imports.html"/>
 <link rel="import" href="../px-d3-imports/px-d3-imports.html"/>
+<link rel="import" href="../px-spinner/px-spinner.html"/>
 <script src="d3-tip.js"></script>
 
 
@@ -28,7 +29,10 @@ Scatter plot implementation using D3
 <dom-module id="og-line-chart">
   <template>
     <style include="og-line-chart-styles"></style>
-    <div class="flex flex--col chart-container">
+    <div class="flex flex--row flex--center flex--middle">
+      <px-spinner size="50" id="spinner"></px-spinner>
+    </div>
+    <div class="flex flex--col chart-container" hidden$="[[loadInProgress]]">
       <div class="flex flex--col">
         <div class$="flex flex--{{legendAlignment}} legend">
           <div class="flex flex--row">
@@ -54,6 +58,7 @@ Scatter plot implementation using D3
       <div class="flex flex--col">
         <div id="chart"></div>
       </div>
+    </div>
   </template>
 </dom-module>
 <script src="dist/og-line-chart.js"></script>
