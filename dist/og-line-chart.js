@@ -531,8 +531,7 @@
     _addClipPath: function _addClipPath() {
       var _this4 = this;
 
-      var d3 = Px.d3;
-      d3.selectAll(".series-line").attr('clip-path', function (d) {
+      this.svg.selectAll(".series-line").attr('clip-path', function (d) {
         return 'url(#' + _this4.clipPathId;
       });
     },
