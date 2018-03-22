@@ -255,6 +255,7 @@
       this._drawTimelineSeparators(data);
       this._drawAxes(data);
       this._drawChart(data);
+      this._addClipPath();
 
       this.fire("chart-drawn", {});
       this.$.spinner.finished = true;
@@ -289,6 +290,7 @@
       if (this.axisData.y.tickColor) {
         updateStyle('--y-tick-color', this.axisData.y.tickColor);
       }
+      this.clipPathId = "og-line-chart-clip-" + new Date().getTime();
     },
     _massageData: function _massageData(data) {
       var _this2 = this;
@@ -328,7 +330,7 @@
       d3.select(this.$.chart).select("svg").remove();
       this.containerSvg = d3.select(this.$.chart).append("svg").attr("viewBox", "0 0 " + this.width + " " + this.height).attr("preserveAspectRatio", "xMidYMid meet");
 
-      this.containerSvg.append("defs").append("clipPath").attr("id", "clip").append("rect").attr("width", this.adjustedWidth).attr("height", this.height).attr("x", 0).attr("y", 0);
+      this.containerSvg.append("defs").append("clipPath").attr("id", '' + this.clipPathId).append("rect").attr("width", this.adjustedWidth).attr("height", this.height).attr("x", 0).attr("y", 0);
 
       this.svg = this.containerSvg.append("g").attr("class", "focus").attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 
@@ -525,6 +527,14 @@
         //     });
       });
       this._drawBrushAndZoomForMinimap();
+    },
+    _addClipPath: function _addClipPath() {
+      var _this4 = this;
+
+      var d3 = Px.d3;
+      d3.selectAll(".series-line").attr('clip-path', function (d) {
+        return 'url(#' + _this4.clipPathId;
+      });
     },
     _drawLineChart: function _drawLineChart(_series, filteredData, idx) {
       var x = this.x,

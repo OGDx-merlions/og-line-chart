@@ -254,6 +254,7 @@
       this._drawTimelineSeparators(data);
       this._drawAxes(data);
       this._drawChart(data);
+      this._addClipPath();
 
       this.fire("chart-drawn", {});
       this.$.spinner.finished = true;
@@ -287,6 +288,7 @@
       if(this.axisData.y.tickColor) {
         updateStyle('--y-tick-color', this.axisData.y.tickColor);
       }
+      this.clipPathId = "og-line-chart-clip-" + new Date().getTime();
     },
 
     _massageData(data) {
@@ -331,7 +333,7 @@
         .attr("preserveAspectRatio", "xMidYMid meet");
 
       this.containerSvg.append("defs").append("clipPath")
-        .attr("id", "clip")
+        .attr("id", `${this.clipPathId}`)
       .append("rect")
         .attr("width", this.adjustedWidth)
         .attr("height", this.height)
@@ -579,6 +581,13 @@
         //     });
       });
       this._drawBrushAndZoomForMinimap();
+    },
+
+    _addClipPath() {
+      let d3 = Px.d3;
+      d3.selectAll(".series-line").attr('clip-path', d => {
+        return `url(#${this.clipPathId}`;
+      });
     },
 
     _drawLineChart(_series, filteredData, idx) {
