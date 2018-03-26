@@ -193,6 +193,15 @@
         type: String,
         value: "UTC"
       },
+      /**
+       * Alert 
+       * Eg: {'x': 1, 'y': 2, 'color': #bbb}
+       *
+       * @property alert
+       */
+      alert: {
+        type: Object
+      },
       dateRange: {
         type: String,
         notify: true
@@ -255,6 +264,7 @@
       this._drawAxes(data);
       this._drawChart(data);
       this._addClipPath();
+      this._placeAlertSvg();
 
       this.fire("chart-drawn", {});
       this.$.spinner.finished = true;
@@ -589,6 +599,19 @@
       });
     },
 
+    _placeAlertSvg() {
+      let x = this.x, y = this.y, d3 = Px.d3;
+      if(!this.alert) {return;}
+      d3.select(this.$.chart).select("polygon.alert").remove();
+      let ptX = x(this.parseTime(this.alert.x)),
+          ptY = y(+this.alert.y),
+          pts = `${ptX*0.99},${ptY*0.65} ${ptX},${ptY*0.98} ${ptX*0.98},${ptY*0.98}`;
+      this.svg.append("polygon")
+        .attr("class", "alert")
+        .attr("points", pts)
+        .style("fill", this.alert.color || "#f34336");
+    },
+
     _drawLineChart(_series, filteredData, idx) {
       let x = this.x, y = this.y, d3 = Px.d3,
           minimapX = this.minimap.x, minimapY = this.minimap.y;
@@ -645,6 +668,7 @@
             .translate(-s[0], 0));
         me.setDateRange(x.domain()[0], x.domain()[1]);
         me._drawTimelineSeparators();
+        me._placeAlertSvg();
       }
 
       this.zoomed = () => {
@@ -660,6 +684,7 @@
           .call(me.brush.move, x.range().map(t.invertX, t));
         me.setDateRange(x.domain()[0], x.domain()[1]);
         me._drawTimelineSeparators();
+        me._placeAlertSvg();
       };
 
       this.brush = d3.brushX()

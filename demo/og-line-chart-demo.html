@@ -49,7 +49,8 @@
           data='[[props.data.value]]'
           cfg-x-axis="[[props.cfgXAxis.value]]"
           cfg-y-axis="[[props.cfgYAxis.value]]"
-          cfg-series="[[props.cfgSeries.value]]">        
+          cfg-series="[[props.cfgSeries.value]]"
+          alert="[[props.alert.value]]">        
         </og-line-chart>
       </px-demo-component>
       <!-- END Component ------------------------------------------------------>
@@ -314,6 +315,15 @@
             "dashArray": "2,2"
           }
         ],
+        inputType: 'code:JSON'
+      },
+      alert: {
+        type: Object,
+        defaultValue: {
+          "x": "1455322126697", 
+          "y": "7.43",
+          "color": "steelblue"
+        },
         inputType: 'code:JSON'
       }
     }
