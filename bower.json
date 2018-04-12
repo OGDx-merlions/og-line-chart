@@ -1,6 +1,6 @@
 {
   "name": "og-line-chart",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "main": [
     "og-line-chart.html"
   ],
