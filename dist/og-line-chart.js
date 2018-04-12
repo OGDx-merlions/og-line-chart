@@ -574,9 +574,9 @@
         }).on('mouseout', function (d) {
           _this5.toolTip.hide(d);
         });
-        info.append("circle").attr("class", "alert-line alert-text ").attr("cx", x(_xAsTime)).attr("cy", -17).attr("r", 7);
-        info.append("circle").attr("class", "alert-line alert-text no-pointer").attr("cx", x(_xAsTime)).attr("cy", -20).attr("r", 0.5);
-        info.append("svg:line").attr("class", "alert-line alert-text no-pointer").attr("x1", x(_xAsTime)).attr("y1", -18).attr("x2", x(_xAsTime)).attr("y2", -14);
+        info.append("circle").attr("class", "alert-line alert-text ").attr("cx", x(_xAsTime)).attr("cy", -24).attr("r", 5);
+        info.append("circle").attr("class", "alert-line alert-text no-pointer").attr("cx", x(_xAsTime)).attr("cy", -27).attr("r", 0.5);
+        info.append("svg:line").attr("class", "alert-line alert-text no-pointer").attr("x1", x(_xAsTime)).attr("y1", -25).attr("x2", x(_xAsTime)).attr("y2", -21);
       }
     },
     _drawLineChart: function _drawLineChart(_series, filteredData, idx) {

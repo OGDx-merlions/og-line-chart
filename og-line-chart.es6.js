@@ -635,19 +635,19 @@
         info.append("circle")
           .attr("class", "alert-line alert-text ")
           .attr("cx", x(_xAsTime))
-          .attr("cy", -17)
-          .attr("r", 7);
+          .attr("cy", -24)
+          .attr("r", 5);
         info.append("circle")
           .attr("class", "alert-line alert-text no-pointer")
           .attr("cx", x(_xAsTime))
-          .attr("cy", -20)
+          .attr("cy", -27)
           .attr("r", 0.5);
         info.append("svg:line")
           .attr("class", "alert-line alert-text no-pointer")
           .attr("x1", x(_xAsTime))
-          .attr("y1", -18)
+          .attr("y1", -25)
           .attr("x2", x(_xAsTime))
-          .attr("y2", -14);
+          .attr("y2", -21);
       }
     },
 
