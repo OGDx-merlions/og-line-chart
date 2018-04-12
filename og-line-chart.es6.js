@@ -364,7 +364,7 @@
 
       this.toolTip = d3.tip(d3.select(this.$.chart))
         .attr("class", "d3-tip")
-        .offset([-20, 0])
+        .offset([-(this.margin.top + this.margin.bottom + 10), 0])
         .html(function(d) {
           return d.msg;
         });

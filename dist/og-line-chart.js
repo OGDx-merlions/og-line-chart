@@ -346,7 +346,7 @@
 
       this.minimapSvg = this.containerSvg.append("g").attr("class", "minimap").attr("transform", "translate(" + this.margin.left + "," + (this.adjustedHeight + this.minimap.adjustedHeight + 50) + ")");
 
-      this.toolTip = d3.tip(d3.select(this.$.chart)).attr("class", "d3-tip").offset([-20, 0]).html(function (d) {
+      this.toolTip = d3.tip(d3.select(this.$.chart)).attr("class", "d3-tip").offset([-(this.margin.top + this.margin.bottom + 10), 0]).html(function (d) {
         return d.msg;
       });
 
