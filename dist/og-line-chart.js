@@ -195,7 +195,7 @@
       },
       /**
        * Alert 
-       * Eg: {'x': 1, 'y': 2, 'color': #bbb}
+       * Eg: {'x': 1, 'text': 'Anomaly text'}
        *
        * @property alert
        */
@@ -265,7 +265,7 @@
       this._drawAxes(data);
       this._drawChart(data);
       this._addClipPath();
-      this._placeAlertSvg();
+      this._drawAlertLine();
 
       this.fire("chart-drawn", {});
       this.$.spinner.finished = true;
@@ -346,7 +346,7 @@
 
       this.minimapSvg = this.containerSvg.append("g").attr("class", "minimap").attr("transform", "translate(" + this.margin.left + "," + (this.adjustedHeight + this.minimap.adjustedHeight + 50) + ")");
 
-      this.toolTip = d3.tip(d3.select(this.$.chart)).attr("class", "d3-tip").offset([-8, 0]).html(function (d) {
+      this.toolTip = d3.tip(d3.select(this.$.chart)).attr("class", "d3-tip").offset([-20, 0]).html(function (d) {
         return d.msg;
       });
 
@@ -558,6 +558,27 @@
           pts = ptX * 0.99 + ',' + ptY * 0.65 + ' ' + ptX + ',' + ptY * 0.98 + ' ' + ptX * 0.98 + ',' + ptY * 0.98;
       this.svg.append("polygon").attr("class", "alert").attr("points", pts).style("fill", this.alert.color || "#f34336");
     },
+    _drawAlertLine: function _drawAlertLine(data) {
+      var _this5 = this;
+
+      var x = this.x,
+          y = this.y,
+          d3 = Px.d3;
+      this.svg.selectAll(".alert-line").remove();
+      if (this.alert) {
+        var _xAsTime = this.parseTime(this.alert.x);
+        this.svg.append("svg:line").attr("class", "alert-line alert").attr("x1", x(_xAsTime)).attr("y1", this.adjustedHeight + 18).attr("x2", x(_xAsTime)).attr("y2", -7);
+
+        var info = this.svg.append("g").attr("class", "alert-line alert-text").on('mouseover', function (d, i) {
+          _this5.toolTip.show({ "msg": _this5.alert.text });
+        }).on('mouseout', function (d) {
+          _this5.toolTip.hide(d);
+        });
+        info.append("circle").attr("class", "alert-line alert-text ").attr("cx", x(_xAsTime)).attr("cy", -17).attr("r", 7);
+        info.append("circle").attr("class", "alert-line alert-text no-pointer").attr("cx", x(_xAsTime)).attr("cy", -20).attr("r", 0.5);
+        info.append("svg:line").attr("class", "alert-line alert-text no-pointer").attr("x1", x(_xAsTime)).attr("y1", -18).attr("x2", x(_xAsTime)).attr("y2", -14);
+      }
+    },
     _drawLineChart: function _drawLineChart(_series, filteredData, idx) {
       var x = this.x,
           y = this.y,
@@ -606,7 +627,7 @@
         me.svg.select(".zoom").call(me.zoom.transform, d3.zoomIdentity.scale(me.adjustedWidth / (s[1] - s[0])).translate(-s[0], 0));
         me.setDateRange(x.domain()[0], x.domain()[1]);
         me._drawTimelineSeparators();
-        me._placeAlertSvg();
+        me._drawAlertLine();
       };
 
       this.zoomed = function () {
@@ -621,7 +642,7 @@
         me.minimapSvg.select(".brush").call(me.brush.move, x.range().map(t.invertX, t));
         me.setDateRange(x.domain()[0], x.domain()[1]);
         me._drawTimelineSeparators();
-        me._placeAlertSvg();
+        me._drawAlertLine();
       };
 
       this.brush = d3.brushX().extent([[0, 0], [this.adjustedWidth, this.minimap.adjustedHeight]]).handleSize(7).on("brush end", this.brushed);

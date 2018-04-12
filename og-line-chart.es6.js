@@ -195,7 +195,7 @@
       },
       /**
        * Alert 
-       * Eg: {'x': 1, 'y': 2, 'color': #bbb}
+       * Eg: {'x': 1, 'text': 'Anomaly text'}
        *
        * @property alert
        */
@@ -264,7 +264,7 @@
       this._drawAxes(data);
       this._drawChart(data);
       this._addClipPath();
-      this._placeAlertSvg();
+      this._drawAlertLine();
 
       this.fire("chart-drawn", {});
       this.$.spinner.finished = true;
@@ -364,7 +364,7 @@
 
       this.toolTip = d3.tip(d3.select(this.$.chart))
         .attr("class", "d3-tip")
-        .offset([-8, 0])
+        .offset([-20, 0])
         .html(function(d) {
           return d.msg;
         });
@@ -612,6 +612,45 @@
         .style("fill", this.alert.color || "#f34336");
     },
 
+    _drawAlertLine(data) {
+      let x = this.x, y = this.y, d3 = Px.d3;
+      this.svg.selectAll(".alert-line").remove();
+      if(this.alert) {
+        let _xAsTime = this.parseTime(this.alert.x)
+        this.svg.append("svg:line")
+          .attr("class", "alert-line alert")
+          .attr("x1", x(_xAsTime))
+          .attr("y1", this.adjustedHeight+18)
+          .attr("x2", x(_xAsTime))
+          .attr("y2", -7);
+
+        let info = this.svg.append("g")
+          .attr("class", "alert-line alert-text")
+          .on('mouseover', (d, i) => {
+            this.toolTip.show({"msg": this.alert.text});
+          })
+          .on('mouseout', (d) => {
+            this.toolTip.hide(d);
+          });
+        info.append("circle")
+          .attr("class", "alert-line alert-text ")
+          .attr("cx", x(_xAsTime))
+          .attr("cy", -17)
+          .attr("r", 7);
+        info.append("circle")
+          .attr("class", "alert-line alert-text no-pointer")
+          .attr("cx", x(_xAsTime))
+          .attr("cy", -20)
+          .attr("r", 0.5);
+        info.append("svg:line")
+          .attr("class", "alert-line alert-text no-pointer")
+          .attr("x1", x(_xAsTime))
+          .attr("y1", -18)
+          .attr("x2", x(_xAsTime))
+          .attr("y2", -14);
+      }
+    },
+
     _drawLineChart(_series, filteredData, idx) {
       let x = this.x, y = this.y, d3 = Px.d3,
           minimapX = this.minimap.x, minimapY = this.minimap.y;
@@ -668,7 +707,7 @@
             .translate(-s[0], 0));
         me.setDateRange(x.domain()[0], x.domain()[1]);
         me._drawTimelineSeparators();
-        me._placeAlertSvg();
+        me._drawAlertLine();
       }
 
       this.zoomed = () => {
@@ -684,7 +723,7 @@
           .call(me.brush.move, x.range().map(t.invertX, t));
         me.setDateRange(x.domain()[0], x.domain()[1]);
         me._drawTimelineSeparators();
-        me._placeAlertSvg();
+        me._drawAlertLine();
       };
 
       this.brush = d3.brushX()
