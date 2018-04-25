@@ -595,7 +595,7 @@
 
     _addClipPath() {
       this.svg.selectAll(".series-line").attr('clip-path', d => {
-        return `url(#${this.clipPathId}`;
+        return `url(#${this.clipPathId})`;
       });
     },
 

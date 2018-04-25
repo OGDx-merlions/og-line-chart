@@ -542,7 +542,7 @@
       var _this4 = this;
 
       this.svg.selectAll(".series-line").attr('clip-path', function (d) {
-        return 'url(#' + _this4.clipPathId;
+        return 'url(#' + _this4.clipPathId + ')';
       });
     },
     _placeAlertSvg: function _placeAlertSvg() {
