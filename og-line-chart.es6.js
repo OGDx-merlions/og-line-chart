@@ -767,6 +767,7 @@
       if(!data || !data.length) {
         return;
       }
+      this.lines = undefined;
       Px.d3.select(this.$.chart).select("svg").remove();
       this.draw();
     },
