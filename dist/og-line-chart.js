@@ -212,6 +212,16 @@
         type: String,
         value: "font-size: 1rem;"
       },
+      /**
+      * The font size to use within the SVG
+      * Eg: "1rem"
+      *
+      * @property svgFontSize
+      */
+      svgFontSize: {
+        type: String,
+        value: "0.8rem"
+      },
       dateRange: {
         type: String,
         notify: true
@@ -291,7 +301,7 @@
 
       var updateStyle = function updateStyle(key, val) {
         if (_this.customStyle) {
-          _this.customStyle['--x-axis-color'] = _this.axisData.x.axisColor;
+          _this.customStyle[key] = val;
           _this.updateStyles();
         } else {
           _this.updateStyles({ "`${key}`": val });
@@ -309,6 +319,9 @@
       }
       if (this.axisData.y.tickColor) {
         updateStyle('--y-tick-color', this.axisData.y.tickColor);
+      }
+      if (this.svgFontSize) {
+        updateStyle('--svg-font-size', this.svgFontSize);
       }
       this.clipPathId = "og-line-chart-clip-" + new Date().getTime();
     },
@@ -439,15 +452,15 @@
         this.svg.append("svg:line").attr("class", "line-sep today").attr("x1", x(this.todayAsDate)).attr("y1", this.adjustedHeight + 18).attr("x2", x(this.todayAsDate)).attr("y2", -7);
 
         if (this.historicalLabel) {
-          this.svg.append("text").attr("class", "line-sep today-text").attr("x", x(this.todayAsDate) / 3).attr("y", -9).text(this.historicalLabel);
+          this.svg.append("text").attr("class", "svg-text line-sep today-text").attr("x", x(this.todayAsDate) / 3).attr("y", -9).text(this.historicalLabel);
         }
 
         if (this.todayLabel) {
-          this.svg.append("text").attr("class", "line-sep today-text").attr("x", x(this.todayAsDate) - 10).attr("y", -9).text(this.todayLabel);
+          this.svg.append("text").attr("class", "svg-text line-sep today-text").attr("x", x(this.todayAsDate) - 10).attr("y", -9).text(this.todayLabel);
         }
 
         if (this.forecastLabel) {
-          this.svg.append("text").attr("class", "line-sep today-text").attr("x", x(this.todayAsDate) * 1.1).attr("y", -9).text(this.forecastLabel);
+          this.svg.append("text").attr("class", "svg-text line-sep today-text").attr("x", x(this.todayAsDate) * 1.1).attr("y", -9).text(this.forecastLabel);
         }
       }
     },
@@ -473,23 +486,23 @@
         _xAxis.ticks(this.axisData.x.niceTicks);
         _minimapXAxis.ticks(this.axisData.x.niceTicks);
       }
-      this.svg.append("g").attr("transform", "translate(0," + this.adjustedHeight + ")").attr("class", "x-axis").call(_xAxis);
+      this.svg.append("g").attr("transform", "translate(0," + this.adjustedHeight + ")").attr("class", "svg-text x-axis").call(_xAxis);
 
-      this.minimapSvg.append("g").attr("class", "x-axis minimap-x-axis").attr("transform", "translate(0," + this.minimap.adjustedHeight + ")").call(_minimapXAxis);
+      this.minimapSvg.append("g").attr("class", "svg-text x-axis minimap-x-axis").attr("transform", "translate(0," + this.minimap.adjustedHeight + ")").call(_minimapXAxis);
 
       // Add the Y Axis
       var _yAxis = d3.axisLeft(y).ticks(this.axisData.y.niceTicks || 6);
       if (this.axisData.y.tickFormat) {
         _yAxis.tickFormat(d3.format(this.axisData.y.tickFormat));
       }
-      this.svg.append("g").attr("class", "y-axis").call(_yAxis);
+      this.svg.append("g").attr("class", "svg-text y-axis").call(_yAxis);
 
       if (this.axisData.y.axisLabel) {
-        this.svg.append("text").attr("transform", "rotate(-90)").attr("y", 0 - this.margin.left).attr("x", 0 - this.adjustedHeight / 2).attr("dy", "1em").attr("class", "y-axis-label").text(this.axisData.y.axisLabel);
+        this.svg.append("text").attr("transform", "rotate(-90)").attr("y", 0 - this.margin.left).attr("x", 0 - this.adjustedHeight / 2).attr("dy", "1em").attr("class", "svg-text y-axis-label").text(this.axisData.y.axisLabel);
       }
 
       if (this.axisData.x.axisLabel) {
-        this.svg.append("text").attr("dy", "1em").attr("class", "x-axis-label").attr("text-anchor", "middle").attr("transform", "translate(" + this.adjustedWidth / 2 + "," + (this.adjustedHeight + this.margin.top) + ")").text(this.axisData.x.axisLabel);
+        this.svg.append("text").attr("dy", "1em").attr("class", "svg-text x-axis-label").attr("text-anchor", "middle").attr("transform", "translate(" + this.adjustedWidth / 2 + "," + (this.adjustedHeight + this.margin.top) + ")").text(this.axisData.x.axisLabel);
       }
     },
     _drawChart: function _drawChart(data) {

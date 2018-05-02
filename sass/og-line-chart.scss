@@ -44,6 +44,7 @@ $axis-color: #95a5ae;
   --y-axis-color: $axis-color;
   --x-tick-color: $axis-color;
   --y-tick-color: $axis-color;
+  --svg-font-size: 0.8rem;
 }
 
 #chart {
@@ -92,6 +93,10 @@ $axis-color: #95a5ae;
   .today-text {
     font-size: 0.65rem;
     fill: $axis-color;
+  }
+
+  .svg-text {
+    font-size: var(--svg-font-size);
   }
 
   .alert-text {

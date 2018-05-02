@@ -212,6 +212,16 @@
         type: String,
         value: "font-size: 1rem;"
       },
+      /**
+      * The font size to use within the SVG
+      * Eg: "1rem"
+      *
+      * @property svgFontSize
+      */
+      svgFontSize : {
+        type: String,
+        value: "0.8rem"
+      },
       dateRange: {
         type: String,
         notify: true
@@ -289,7 +299,7 @@
 
       const updateStyle = (key, val) => {
         if(this.customStyle) {
-          this.customStyle['--x-axis-color'] = this.axisData.x.axisColor;
+          this.customStyle[key] = val;
           this.updateStyles();
         } else {
           this.updateStyles({"`${key}`": val});
@@ -307,6 +317,9 @@
       }
       if(this.axisData.y.tickColor) {
         updateStyle('--y-tick-color', this.axisData.y.tickColor);
+      }
+      if(this.svgFontSize) {
+        updateStyle('--svg-font-size', this.svgFontSize);
       }
       this.clipPathId = "og-line-chart-clip-" + new Date().getTime();
     },
@@ -465,7 +478,7 @@
 
         if(this.historicalLabel) {
           this.svg.append("text")
-            .attr("class", "line-sep today-text")
+            .attr("class", "svg-text line-sep today-text")
             .attr("x", x(this.todayAsDate)/3)
             .attr("y", -9)
             .text(this.historicalLabel);
@@ -473,7 +486,7 @@
 
         if(this.todayLabel) {
           this.svg.append("text")
-            .attr("class", "line-sep today-text")
+            .attr("class", "svg-text line-sep today-text")
             .attr("x", x(this.todayAsDate)-10)
             .attr("y", -9)
             .text(this.todayLabel);
@@ -481,7 +494,7 @@
 
         if(this.forecastLabel) {
           this.svg.append("text")
-            .attr("class", "line-sep today-text")
+            .attr("class", "svg-text line-sep today-text")
             .attr("x", x(this.todayAsDate)*1.1)
             .attr("y", -9)
             .text(this.forecastLabel);
@@ -511,11 +524,11 @@
       }
       this.svg.append("g")
           .attr("transform", "translate(0," + this.adjustedHeight + ")")
-          .attr("class", "x-axis")
+          .attr("class", "svg-text x-axis")
           .call(_xAxis);
       
       this.minimapSvg.append("g")
-        .attr("class", "x-axis minimap-x-axis")
+        .attr("class", "svg-text x-axis minimap-x-axis")
         .attr("transform", "translate(0," + this.minimap.adjustedHeight + ")")
         .call(_minimapXAxis);
 
@@ -525,7 +538,7 @@
         _yAxis.tickFormat(d3.format(this.axisData.y.tickFormat));
       }
       this.svg.append("g")
-          .attr("class", "y-axis")
+          .attr("class", "svg-text y-axis")
           .call(_yAxis);
 
       if(this.axisData.y.axisLabel) {
@@ -534,14 +547,14 @@
           .attr("y", 0 - this.margin.left)
           .attr("x",0 - (this.adjustedHeight / 2))
           .attr("dy", "1em")
-          .attr("class", "y-axis-label")
+          .attr("class", "svg-text y-axis-label")
           .text(this.axisData.y.axisLabel);
       }
 
       if(this.axisData.x.axisLabel) {
         this.svg.append("text")
           .attr("dy", "1em")
-          .attr("class", "x-axis-label")
+          .attr("class", "svg-text x-axis-label")
           .attr("text-anchor", "middle")
           .attr("transform", "translate("+ 
             (this.adjustedWidth/2) +","+(this.adjustedHeight + this.margin.top)+")")
