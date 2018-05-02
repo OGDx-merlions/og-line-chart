@@ -202,6 +202,16 @@
       alert: {
         type: Object
       },
+      /**
+       * Legend Label style
+       * Eg: "font-size: 1rem;"
+       *
+       * @property labelStyle
+       */
+      labelStyle: {
+        type: String,
+        value: "font-size: 1rem;"
+      },
       dateRange: {
         type: String,
         notify: true

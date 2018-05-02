@@ -39,7 +39,7 @@ Scatter plot implementation using D3
             <template is="dom-repeat" items="{{cfgSeries}}" index-as="idx" as="item">
               <div class="flex flex__item flex--col u-pr++ zeta legend-unit" 
                 style$="border-color: {{item.color}}" on-tap="_toggleSeries">
-                <span class="flex flex--top muted">{{item.legendLabel}}</span>
+                <span class="flex flex--top" style$="[[labelStyle]]">{{item.legendLabel}}</span>
               </div>
             </template>
           </div>
