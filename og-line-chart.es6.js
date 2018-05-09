@@ -141,6 +141,8 @@
               "tickFormat": "",
               "type": "",
               "interpolation": "",
+              "strokeWidth": 1,
+              "minimapStrokeWidth": 1,
               "xStart": "",
               "xEnd": ""
             }
@@ -261,6 +263,8 @@
       "tickColor": "",
       "niceTicks": 6,
       "tickFormat": "",
+      "strokeWidth": 1,
+      "minimapStrokeWidth": 1,
       "start": 0
     },
 
@@ -697,6 +701,7 @@
         .data([filteredData])
         .attr("class", `series-line series-line-${idx} series-circle-${idx}`)
         .style("stroke", _series.color || "steelblue")
+        .style("stroke-width", _series.strokeWidth || 1)
         .style("stroke-dasharray", _series.dashArray || "0,0")
         .attr("fill", "transparent")
         .attr("d", line)
@@ -706,6 +711,7 @@
         .data([filteredData])
         .attr("class", `minimap-line minimap-series-${idx}`)
         .style("stroke", _series.color || "steelblue")
+        .style("stroke-width", _series.minimapStrokeWidth || 1)
         .style("stroke-dasharray", _series.dashArray || "0,0")
         .attr("fill", "transparent")
         .attr("d", minimapLine)
